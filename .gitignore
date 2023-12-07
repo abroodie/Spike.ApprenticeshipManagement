@@ -361,4 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-FCMPushNotificationTest/appSettings.debug.json
+
+# Local dev config files
+appSettings.debug.json
+local.settings.json 
