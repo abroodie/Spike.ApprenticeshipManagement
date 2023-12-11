@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using DASApprenticeManagementPOC.Authentication;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
@@ -24,12 +26,19 @@ namespace DASApprenticeManagementPOC
                 .UseMauiApp<App>()
                 .AddAppSettings()
                 .RegisterFirebaseServices()
+                
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 });
 
             builder.Services.AddMauiBlazorWebView();
+            builder.Services.AddAuthorizationCore();
+            builder.Services.AddScoped<CustomAuthenticationStateProvider>()
+                .AddScoped<AuthenticationStateProvider>(
+                    sp => sp.GetRequiredService<CustomAuthenticationStateProvider>())
+                .AddSingleton<UserAccounts>()
+                .AddScoped<UserAccountAuthenticator>();
 
 #if DEBUG
     		builder.Services.AddBlazorWebViewDeveloperTools();
