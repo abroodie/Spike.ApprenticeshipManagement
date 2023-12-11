@@ -3,19 +3,29 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <title>DASApprenticeManagementPOC</title>
+    <title>Apprentice Management POC</title>
     <base href="/" />
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+    <link href="css/main.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/app.css" />
     <link rel="stylesheet" href="DASApprenticeManagementPOC.styles.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
 </head>
 
-<body>
+<body class="govuk-template__body ">
 
     <div class="status-bar-safe-area"></div>
 
-    <div id="app">Loading...</div>
+    <div id="app">
+        <div style="position:absolute; top:30vh; width:100%; text-align:center">
+            <h1>Apprentice Management App POC</h1>
+            <div style="display:flex; gap:10px; justify-content:center; align-items:center">
+                <div class="spinner-border" role="status"></div>
+                The application is loading...
+            </div>
+        </div>
+    </div>
+
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
@@ -24,7 +34,10 @@
     </div>
 
     <script src="_framework/blazor.webview.js" autostart="false"></script>
-
+<script src="./scripts/service-header.js"></script>
+<script>
+    var oneLoginHeader = document.querySelector("[data-module='one-login-header']");
+        new window.CrossServiceHeader(oneLoginHeader).init();</script>
 </body>
 
 </html>

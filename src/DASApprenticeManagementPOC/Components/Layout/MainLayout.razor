@@ -4,15 +4,17 @@
     <div class="sidebar">
         <NavMenu />
     </div>
-
+    <GovHeader />
     <main>
         <div class="top-row px-4">
-            <UserDetails></UserDetails>
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            @* <UserDetails></UserDetails> *@
+            @* <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a> *@
         </div>
 
         <article class="content px-4">
             @Body
         </article>
     </main>
+    
+    <GovFooter/>
 </div>
