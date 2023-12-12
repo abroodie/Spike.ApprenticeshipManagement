@@ -2,7 +2,7 @@
 @inject NavigationManager NavigationManager
 @inject CustomAuthenticationStateProvider AuthenticationStateProvider
 
-<AuthorizeView>
+@* <AuthorizeView>
     <Authorized>
         Hello, @context.User.Identity.Name! 
         <a href="#" @onclick="Logout">Log out</a>
@@ -11,7 +11,7 @@
         <a href="#" @onclick="Login">Log in</a>
     </NotAuthorized>
 </AuthorizeView>
-
+ *@
 @code {
 
     private async Task Logout()
