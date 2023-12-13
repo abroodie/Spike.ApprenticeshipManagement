@@ -1,0 +1,27 @@
+﻿@using ApprenticeManagement.POC.Authentication
+@inject NavigationManager NavigationManager
+@inject CustomAuthenticationStateProvider AuthenticationStateProvider
+
+ <AuthorizeView>
+     <Authorized>
+         <span>@context.User.Identity.Name</span>, <span>@context.User.Claims.FirstOrDefault(c => c.Type.Equals("EmployerName"))?.Value</span>
+         <a href="#" @onclick="Logout">Log out</a>
+     </Authorized>
+    <NotAuthorized>
+        <a href="#" @onclick="Login">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>
+ 
+@code {
+
+    private async Task Logout()
+    {
+        await AuthenticationStateProvider.Logout();
+    }
+
+    private async Task Login()
+    {
+        //await App.Current.MainPage.Navigation.PushAsync(new Login());
+        NavigationManager.NavigateTo("/login");
+    }
+}

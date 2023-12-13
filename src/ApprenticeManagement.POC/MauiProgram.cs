@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using ApprenticeManagement.POC.Authentication;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
@@ -33,9 +35,15 @@ namespace ApprenticeManagement.POC
                 });
 
             builder.Services.AddMauiBlazorWebView();
+            builder.Services.AddAuthorizationCore();
+            builder.Services.AddScoped<CustomAuthenticationStateProvider>()
+                .AddScoped<AuthenticationStateProvider>(
+                    sp => sp.GetRequiredService<CustomAuthenticationStateProvider>())
+                .AddSingleton<UserAccounts>()
+                .AddScoped<UserAccountAuthenticator>();
 
 #if DEBUG
-    		builder.Services.AddBlazorWebViewDeveloperTools();
+            builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
 #endif
 
