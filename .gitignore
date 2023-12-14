@@ -365,3 +365,4 @@ FodyWeavers.xsd
 # Local dev config files
 appSettings.debug.json
 local.settings.json 
+/src/DASApprenticeManagementPOC/appSettings.debug.json
