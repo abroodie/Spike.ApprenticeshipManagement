@@ -19,11 +19,11 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 8.0.x
     - name: Install .NET MAUI
       run: dotnet workload install maui
-    - name: Restore dependencies
-      run: dotnet restore
+    - name: Restore dependencies      
+      run: dotnet restore ./src/ApprenticeManagement.POC/ApprenticeManagement.POC.csproj
     - name: Build
-      run: dotnet build ApprenticeManagement.POC/ApprenticeManagement.POC.csproj -c Release -f net8.0-android;net8.0-ios --no-restore
+      run: dotnet build ./src/ApprenticeManagement.POC/ApprenticeManagement.POC.csproj -c Release -f net8.0-android --no-restore
 
