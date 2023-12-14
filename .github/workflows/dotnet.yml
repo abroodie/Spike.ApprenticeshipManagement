@@ -22,8 +22,8 @@ jobs:
         dotnet-version: 6.0.x
     - name: Install .NET MAUI
       run: dotnet workload install maui
-    - name: Restore dependencies
-      run: dotnet restore
+    - name: Restore dependencies      
+      run: dotnet restore ApprenticeManagement.POC/ApprenticeManagement.POC.csproj
     - name: Build
       run: dotnet build ApprenticeManagement.POC/ApprenticeManagement.POC.csproj -c Release -f net8.0-android;net8.0-ios --no-restore
 
