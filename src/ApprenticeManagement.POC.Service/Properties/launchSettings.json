@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "ApprenticeManagement.POC.Service": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7206",
+      "launchBrowser": false,
+      "devTunnelEnabled": true,
+      "devTunnelAccess": "public"
+    }
+
+  }
+}
