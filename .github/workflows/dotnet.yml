@@ -25,5 +25,5 @@ jobs:
     - name: Restore dependencies      
       run: dotnet restore ./src/ApprenticeManagement.POC/ApprenticeManagement.POC.csproj
     - name: Build
-      run: dotnet build ApprenticeManagement.POC/ApprenticeManagement.POC.csproj -c Release -f net8.0-android;net8.0-ios --no-restore
+      run: dotnet build ApprenticeManagement.POC/ApprenticeManagement.POC.csproj -c Release -f net8.0-android --no-restore
 
