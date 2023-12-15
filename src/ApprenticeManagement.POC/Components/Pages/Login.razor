@@ -1,9 +1,12 @@
 ﻿@page "/login"
 @using ApprenticeManagement.POC.Authentication
+@using Plugin.Firebase.CloudMessaging
+@using System.Security.Claims
 @inject NavigationManager  NavigationManager
 @inject CustomAuthenticationStateProvider AuthenticationStateProvider
 @inject UserAccounts UserAccounts
 @inject UserAccountAuthenticator UserAccountAuthenticator
+@inject DeviceManagementService DeviceManagementService
 
 <h3>Login to access the app</h3>
 

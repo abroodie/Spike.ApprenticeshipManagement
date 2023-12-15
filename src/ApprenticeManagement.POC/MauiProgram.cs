@@ -34,6 +34,11 @@ namespace ApprenticeManagement.POC
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 });
 
+            var serviceUri = builder.Configuration.GetValue<string>("apprenticeManagementServiceBaseUri");
+            builder.Services.AddMauiBlazorWebView()
+                .Services.AddSingleton<DeviceManagementService>(new DeviceManagementService(serviceUri))
+                ;
+
             builder.Services.AddMauiBlazorWebView();
             builder.Services.AddAuthorizationCore();
             builder.Services.AddScoped<CustomAuthenticationStateProvider>()
@@ -92,7 +97,7 @@ namespace ApprenticeManagement.POC
         {
             using var stream = Assembly
                 .GetExecutingAssembly()
-                .GetManifestResourceStream($"FCMPushNotificationTest.{filename}");
+                .GetManifestResourceStream($"{typeof(MauiProgram).Namespace}.{filename}");
             {
                 if (stream != null)
                 {
