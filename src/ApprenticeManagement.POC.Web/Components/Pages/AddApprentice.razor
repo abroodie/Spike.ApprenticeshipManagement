@@ -1,32 +1,67 @@
-﻿@page "/addapprentice"
+﻿@page "/addapprentice/{employerAccount}"
 @using ApprenticeManagement.POC.Common
+@using Bogus
 @rendermode InteractiveServer
 @inject ApprenticeManagementServiceClient Client
+@inject NavigationManager Navigation
 
 <PageTitle>Add new apprenticeship</PageTitle>
 <h3>Add new apprenticeship</h3>
 
 
-<EditForm Model="Model" OnSubmit="Submit">
+<EditForm Model="@Model" OnSubmit="@Submit">
+    <div class="form-group">
+
+        <div class="form-floating mb-3">
+            <InputText type="text" class="form-control" id="appName" placeholder="@Model.Name" @bind-Value="Model.Name" readonly/>
+            <label for="appName">Apprentice Name</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <InputText type="text" class="form-control" id="appUln" placeholder="@Model.Uln" @bind-Value="Model.Uln" readonly />
+            <label for="appUln">Apprentice ULN</label>
+        </div>
+
+        <label>Course</label>
+        <InputSelect id="course" @bind-Value="Model.Course" class="form-control">
+            <option value="">Select a Course</option>
+            <option value="Archaeological specialist (degree) (level 7)">Archaeological specialist (degree) (level 7)</option>
+            <option value="Broadcast and media systems technician (level 5)">Broadcast and media systems technician (level 5)</option>
+            <option value="Creative industries production technician (level 3)">Creative industries production technician (level 3)</option>
+            <option value="Cultural heritage conservation technician (level 4)">Cultural heritage conservation technician (level 4)</option>
+            <option value="Junior animator (level 4)">Junior animator (level 4)</option>
+
+        </InputSelect>
+        
+        <div>
+
+        </div>
+        <button type="submit" class="btn btn-outline-primary">Add new apprentice</button>
+    </div>
 
 </EditForm>
 
 @code {
+    [Parameter]
+    public string employerAccount { get; set; }
+
     [SupplyParameterFromForm]
-    public Apprentice Model { get; set; }
+    public Apprentice Model { get; set; } = new Apprentice();
 
 
     protected override async Task OnInitializedAsync()
     {
         Model = new Apprentice
-        {
-            Uln = new Random().Next(999999999).ToString("D10"),
-            Name = Bogus
-        };
+            {
+                Uln = new Random().Next(999999999).ToString("D10"),
+                Name = new Faker().Name.FullName(),
+                ApprenticeStatus = ApprenticeStatus.New
+            };
     }
 
     private async Task Submit()
     {
-
+        await Client.AddNewApprentice(employerAccount, Model);
+        Navigation.NavigateTo("/apprentices");
     }
 }

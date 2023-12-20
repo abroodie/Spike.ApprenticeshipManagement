@@ -1,4 +1,6 @@
 ﻿using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ApprenticeManagement.POC.Common;
 
@@ -26,6 +28,11 @@ public class ApprenticeManagementServiceClient
         return employer;
     }
 
+    public async Task AddNewApprentice(string employerAccount, Apprentice apprentice)
+    {
+        await HttpClient.PostAsync($"employers/{employerAccount}/apprentices",  new StringContent(JsonSerializer.Serialize(apprentice)));
+    }
+
     public async Task ChangeApprenticeStatus(string employerAccount, string uln, ApprenticeStatus status)
     {
         await HttpClient.PutAsync($"employers/{employerAccount}/apprentices/{uln}/changestatus",new StringContent(string.Empty));
@@ -34,5 +41,10 @@ public class ApprenticeManagementServiceClient
     public async Task Approve(string employerAccount, string uln)
     {
         await HttpClient.PostAsync($"employers/{employerAccount}/apprentices/{uln}/approve", new StringContent(string.Empty));
+    }
+
+    public async Task SendReminder(string employerAccount)
+    {
+        await HttpClient.PostAsync($"employers/{employerAccount}/remind", new StringContent(string.Empty));
     }
 }

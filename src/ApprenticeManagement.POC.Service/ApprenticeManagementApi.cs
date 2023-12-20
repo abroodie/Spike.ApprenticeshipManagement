@@ -216,7 +216,7 @@ public static class ApprenticeManagementApi
         }
 
         await deviceManagementService.NotifyEmployer(employerAccount, "Reminder: Apprenticeship commitments require approval",
-            $"You have {employer.Apprentices.Count(a => a.ApprenticeStatus != ApprenticeStatus.Approved)} requiring approval.  Please check your employer account.", logger);
+            $"You have {employer.Apprentices.Count(a => a.ApprenticeStatus != ApprenticeStatus.Approved)} apprenticeship commitments requiring approval.  Please check your employer account.", logger);
         return req.CreateResponse(HttpStatusCode.OK);
     }
 }
