@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using ApprenticeManagement.POC.Authentication;
+using ApprenticeManagement.POC.Common;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -36,7 +37,8 @@ namespace ApprenticeManagement.POC
 
             var serviceUri = builder.Configuration.GetValue<string>("apprenticeManagementServiceBaseUri");
             builder.Services.AddMauiBlazorWebView()
-                .Services.AddSingleton<DeviceManagementService>(new DeviceManagementService(serviceUri))
+                .Services.AddSingleton<DeviceManagementServiceClient>(new DeviceManagementServiceClient(serviceUri))
+                .AddSingleton<ApprenticeManagementServiceClient>(new ApprenticeManagementServiceClient(serviceUri));
                 ;
 
             builder.Services.AddMauiBlazorWebView();

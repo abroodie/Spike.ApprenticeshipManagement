@@ -1,0 +1,52 @@
+﻿@page "/userDevices"
+@using ApprenticeManagement.POC.Common
+@inject DeviceManagementServiceClient Client
+
+@attribute [StreamRendering]
+
+<PageTitle>Weather</PageTitle>
+
+<h1>Weather</h1>
+
+<p>This component demonstrates showing data.</p>
+
+@if (userDevices == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>User</th>
+            <th>Employer</th>
+            <th>Device Identifier</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var userDevice in userDevices)
+        {
+            <tr>
+                <td>@userDevice.UserName</td>
+                <td>@userDevice.Employer</td>
+                <td>@userDevice.DeviceId</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<DeviceUser> userDevices;
+
+    protected override async Task OnInitializedAsync()
+    {
+    // Simulate asynchronous loading to demonstrate streaming rendering
+        await Task.Delay(500);
+
+        var startDate = DateOnly.FromDateTime(DateTime.Now);
+        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
+        userDevices = await Client.GetDeviceUsers();
+    }
+}

@@ -1,0 +1,51 @@
+﻿@page "/notifyall"
+@attribute [StreamRendering]
+
+@using ApprenticeManagement.POC.Common
+@inject DeviceManagementServiceClient Client
+@rendermode InteractiveServer
+
+<h1>Notify Users</h1>
+
+
+<div class="d-grid gap-2">
+    <button class="btn btn-primary" @onclick="NotifyAllUsers">Notify All</button>
+
+    <button class="btn btn-primary" @onclick="NotifyEmployer1Users" >Notify Employer 1 Users</button>
+    <button class="btn btn-primary" @onclick="NotifyEmployer2Users" >Notify Employer 2 Users</button>
+
+    <button class="btn btn-primary" @onclick="NotifySarah" >Notify Sarah</button>
+    <button class="btn btn-primary" @onclick="NotifyRosa" >Notify Rosa</button>
+</div>
+
+<button class="btn btn-primary" @onclick="NotifyAllUsers">Notify All</button>
+@* <button class="btn btn-primary" @onclick="NotifyUser()">Notify Employer 1</button> *@
+
+@code {
+
+    public async Task NotifyAllUsers()
+    {
+        await Client.NotifyAll("This is a test message to all Apprentice Management users!!");
+    }
+
+    public void NotifyEmployer1Users()
+    {
+        Client.NotifyEmployers("1234","This is a test message to all users for employer1!!").Wait();
+    }
+
+    public async Task NotifyEmployer2Users()
+    {
+        await Client.NotifyEmployers("2345", "This is a test message to all users for employer2!!");
+    }
+
+    public async Task NotifySarah()
+    {
+        await Client.NotifyUsers("sarah@employer1.com", "This is a test message to Sarah!!");
+    }
+
+    public async Task NotifyRosa()
+    {
+        await Client.NotifyUsers("rosa@employer2.com", "This is a test message to Rosa!!");
+    }
+
+}

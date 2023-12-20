@@ -1,0 +1,66 @@
+﻿@page "/apprentices"
+@using ApprenticeManagement.POC.Common
+@rendermode InteractiveServer
+@inject ApprenticeManagementServiceClient Client
+
+<PageTitle>Apprentices</PageTitle>
+
+<h3>Apprentices</h3>
+
+@if (employers == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    foreach (var employer in employers)
+    {
+        <p>
+            <h4>@employer.Name</h4>
+        </p>
+
+        <ol class="list-group list-group-numbered">
+            @foreach (var apprentice in employer.Apprentices)
+            {
+                <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">@apprentice.Name (@apprentice.Uln)</div>
+                        @apprentice.Course
+                        @if (apprentice.ApprenticeStatus == ApprenticeStatus.Approved)
+                        {
+                            <div>
+                                <button class="btn btn-primary" @onclick="() => ChangeApprenticeStatus(employer, apprentice)">Simulate status change</button>
+                            </div>
+                        }
+                    </div>
+                    <span class="badge bg-primary rounded-pill">@GetDisplayStatus(apprentice.ApprenticeStatus)</span>
+                </li>
+            }
+        </ol>
+    }
+}
+
+@code {
+    private List<Employer> employers = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        employers = await Client.GetEmployers();
+    }
+
+    private string GetDisplayStatus(ApprenticeStatus status)
+    {
+        return status switch
+        {
+            ApprenticeStatus.New => "Awaiting initial approval",
+            ApprenticeStatus.Changed => "Awaiting approval of change",
+            _ => status.ToString()
+        };
+    }
+
+    private async Task ChangeApprenticeStatus(Employer employer, Apprentice apprentice)
+    {
+        await Client.ChangeApprenticeStatus(employer.Account, apprentice.Uln, ApprenticeStatus.Changed);
+        apprentice.ApprenticeStatus = ApprenticeStatus.Changed;
+    }
+}

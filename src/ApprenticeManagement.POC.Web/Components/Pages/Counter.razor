@@ -1,5 +1,7 @@
 ﻿@page "/counter"
+@using ApprenticeManagement.POC.Common
 @rendermode InteractiveServer
+@inject DeviceManagementServiceClient Client
 
 <PageTitle>Counter</PageTitle>
 
@@ -8,12 +10,17 @@
 <p role="status">Current count: @currentCount</p>
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
-
+<button class="btn btn-primary" @onclick="NotifyAllUsers">Notify All</button>
 @code {
     private int currentCount = 0;
 
     private void IncrementCount()
     {
         currentCount++;
+    }
+
+    public async Task NotifyAllUsers()
+    {
+        await Client.NotifyAll("This is a test message to all Apprentice Management users!!");
     }
 }

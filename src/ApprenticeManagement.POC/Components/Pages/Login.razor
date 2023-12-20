@@ -6,7 +6,6 @@
 @inject CustomAuthenticationStateProvider AuthenticationStateProvider
 @inject UserAccounts UserAccounts
 @inject UserAccountAuthenticator UserAccountAuthenticator
-@inject DeviceManagementService DeviceManagementService
 
 <h3>Login to access the app</h3>
 
@@ -53,6 +52,6 @@
             return; //TODO: shouldn't actually be able to get here
 
         await AuthenticationStateProvider.Login(authResult.AuthenticatedUser);
-        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/apprentices");
     }
 }

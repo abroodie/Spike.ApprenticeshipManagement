@@ -1,0 +1,32 @@
+﻿@page "/addapprentice"
+@using ApprenticeManagement.POC.Common
+@rendermode InteractiveServer
+@inject ApprenticeManagementServiceClient Client
+
+<PageTitle>Add new apprenticeship</PageTitle>
+<h3>Add new apprenticeship</h3>
+
+
+<EditForm Model="Model" OnSubmit="Submit">
+
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    public Apprentice Model { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model = new Apprentice
+        {
+            Uln = new Random().Next(999999999).ToString("D10"),
+            Name = Bogus
+        };
+    }
+
+    private async Task Submit()
+    {
+
+    }
+}

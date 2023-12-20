@@ -1,4 +1,4 @@
-namespace ApprenticeManagement.POC.Service;
+namespace ApprenticeManagement.POC.Common;
 
 public class DeviceUser
 {

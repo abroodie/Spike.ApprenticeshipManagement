@@ -1,3 +1,5 @@
+using ApprenticeManagement.POC.Common;
+using ApprenticeManagement.POC.Web;
 using ApprenticeManagement.POC.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,6 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddSingleton<DeviceManagementServiceClient>(svc => new DeviceManagementServiceClient(svc.GetService<IConfiguration>()["apprenticeManagementServiceBaseUri"]));
+builder.Services.AddSingleton<ApprenticeManagementServiceClient>(svc => new ApprenticeManagementServiceClient(svc.GetService<IConfiguration>()["apprenticeManagementServiceBaseUri"]));
+
+
 
 var app = builder.Build();
 

@@ -11,9 +11,9 @@ public class UserAccountAuthenticator
         this.userAccounts = userAccounts;
     }
 
-    public (bool IsValid, ClaimsPrincipal AuthenticatedUser) AuthenticateUser(string userName)
+    public (bool IsValid, AuthenticatedUser AuthenticatedUser) AuthenticateUser(string userName)
     {
-        var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity());
+        var authenticatedUser = new AuthenticatedUser(new ClaimsIdentity());
         var userAccount =
             userAccounts.Users.FirstOrDefault(u => u.Username.Equals(userName, StringComparison.OrdinalIgnoreCase));
         if (userAccount == null) return (false, authenticatedUser);
@@ -25,6 +25,6 @@ public class UserAccountAuthenticator
             new Claim("EmployerAccount",userAccount.EmployerAccount),
             new Claim("EmployerName",userAccount.EmployerName)
         };
-        return (true, new ClaimsPrincipal(new ClaimsIdentity(claims, "Server authentication")));
+        return (true, new AuthenticatedUser(new ClaimsIdentity(claims, "Server authentication")));
     }
 }

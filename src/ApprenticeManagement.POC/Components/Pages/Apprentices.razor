@@ -1,46 +1,86 @@
 ﻿@page "/apprentices"
+@using ApprenticeManagement.POC.Common
+@using ApprenticeManagement.POC.Authentication
+@inject ApprenticeManagementServiceClient Client
+@inject CustomAuthenticationStateProvider StateProvider
+@inject NavigationManager NavigationManager
 
-<h3>Apprentices</h3>
+@attribute [Authorize()]
 
-<div class="list-group">
-    <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-        The current link item
-    </a>
-    <a href="#" class="list-group-item list-group-item-action">A second link item<span class="badge bg-primary rounded-pill">14</span></a>
-    <a href="#" class="list-group-item list-group-item-action">A third link item</a>
-    <a href="#" class="list-group-item list-group-item-action">A fourth link item</a>
-    <a class="list-group-item list-group-item-action disabled" aria-disabled="true">A disabled link item</a>
-</div>
+<PageTitle>Apprentices</PageTitle>
 
-<div class="list-group">
-    <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-        <span class="badge bg-primary rounded-pill">14</span>
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">Apprentice 1</h5>
-            <small>3 days ago</small>
-        </div>
-        <p class="mb-1">Some placeholder content in a paragraph.</p>
-        <small>And some small print.</small>
-        <span class="badge bg-primary rounded-pill">14</span>
-    </a>
-    <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">List group item heading</h5>
-            <small class="text-body-secondary">3 days ago</small>
-        </div>
-        <p class="mb-1">Some placeholder content in a paragraph.</p>
-        <small class="text-body-secondary">And some muted small print.</small>
-    </a>
-    <a href="#" class="list-group-item list-group-item-action">
-        <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">List group item heading</h5>
-            <small class="text-body-secondary">3 days ago</small>
-        </div>
-        <p class="mb-1">Some placeholder content in a paragraph.</p>
-        <small class="text-body-secondary">And some muted small print.</small>
-    </a>
-</div>
+<h3>Manage Apprentices</h3>
+
+
+@if (apprentices == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button class="btn btn-primary " type="button" @onclick="RefreshApprentices">Refresh</button>
+    </div>
+    <div>
+        <h4>Commitments requiring approval<span class="badge text-bg-warning">@apprentices.Count(a => a.ApprenticeStatus != ApprenticeStatus.Approved)</span></h4>
+        <ol class="list-group list-group-numbered">
+            @foreach (var apprentice in apprentices.Where(a => a.ApprenticeStatus != ApprenticeStatus.Approved).OrderBy(a => a.ApprenticeStatus))
+            {
+                <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">@apprentice.Name (@apprentice.Uln)</div>
+                        @apprentice.Course
+                        @if (apprentice.ApprenticeStatus != ApprenticeStatus.Approved)
+                        {
+                            <div>
+                                <button class="btn btn-primary" @onclick="() => Approve(apprentice)">Approve new commitment</button>
+                            </div>
+                        }
+                    </div>
+                    <span class="badge rounded-pill bg-warning">@apprentice.DisplayStatus</span>
+                </li>
+            }
+        </ol>
+    </div>
+
+    <div>
+        <h5>Approved commitments</h5>
+        <ol class="list-group list-group-numbered">
+            @foreach (var apprentice in apprentices.Where(a => a.ApprenticeStatus == ApprenticeStatus.Approved).OrderBy(a => a.Name))
+            {
+                <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">@apprentice.Name (@apprentice.Uln)</div>
+                        @apprentice.Course
+                    </div>
+                </li>
+            }
+        </ol>
+
+    </div>
+}
+
 
 @code {
+    private List<Apprentice> apprentices = null;
+    private AuthenticatedUser CurrentUser = null;
 
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentUser = (AuthenticatedUser)StateProvider.CurrentUser;
+        await RefreshApprentices();
+    }
+
+    private async Task Approve(Apprentice apprentice)
+    {
+        await Client.Approve(CurrentUser.EmployerAccount, apprentice.Uln);
+        await RefreshApprentices();
+    }
+
+    private async Task RefreshApprentices()
+    {
+        apprentices = null;
+        var employer = await Client.GetEmployer(CurrentUser.EmployerAccount);
+        apprentices = employer.Apprentices;
+    }
 }
